@@ -1,0 +1,6 @@
+{
+  "name": "Smart Student Attendance Management System",
+  "description": "Enterprise-grade student attendance management platform with role-based access control, session lifecycle, QR check-in, real-time analytics, and auditable records.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

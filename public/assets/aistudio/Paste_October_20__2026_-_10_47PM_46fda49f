@@ -1,0 +1,1182 @@
+# MASTER PROMPT: BUILD A REAL SMART STUDENT ATTENDANCE MANAGEMENT PLATFORM
+
+## ROLE AND OBJECTIVE
+
+Act as a senior full-stack software architect, Java Spring Boot developer, React developer, database engineer, security engineer, UI/UX designer, QA engineer, and DevOps engineer.
+
+Build a complete, production-minded, functional web platform called:
+
+**Smart Student Attendance Management System**
+
+This platform must be suitable for a college project, a live demonstration, and future expansion for use by an actual educational institution.
+
+I do not want a static website, a frontend-only dashboard, a console application, or a prototype filled with dummy data. I want a working full-stack application with a frontend, Java backend, MySQL database, authentication, attendance workflows, reporting, validation, and setup instructions.
+
+You must create actual project files, implement the features, connect all components, run available tests, fix discovered errors, and provide clear instructions for running the complete platform.
+
+Do not stop after generating a project plan or UI mockup.
+
+---
+
+# 1. PRODUCT VISION
+
+Develop a centralized attendance management platform that allows an educational institution to manage students, teachers, departments, classes, academic sessions, attendance records, and attendance reports.
+
+The platform should reduce manual paperwork, improve the consistency of attendance records, calculate attendance percentages automatically, identify students below attendance requirements, and provide administrators with useful attendance analytics.
+
+The application must distinguish between attendance entered by authorized staff and attendance collected through optional digital check-in methods.
+
+Do not claim that ordinary software attendance entries prove physical presence. Any QR-based or other automated check-in method must have its own documented safeguards and limitations.
+
+## Primary goals
+
+1. Digitize student and staff records.
+2. Provide secure, role-based access.
+3. Support class-wise and date-wise attendance.
+4. Prevent duplicate attendance records.
+5. Calculate attendance percentages correctly.
+6. Identify students below a configurable attendance threshold.
+7. Provide useful reports and export options.
+8. Preserve historical attendance records.
+9. Provide an intuitive and responsive user interface.
+10. Create a maintainable foundation for future enhancements.
+
+---
+
+# 2. TECHNOLOGY STACK
+
+Use the following technology stack consistently.
+
+## Frontend
+
+- React with TypeScript.
+- Vite for development and production builds.
+- Tailwind CSS for styling.
+- shadcn/ui or an equivalent accessible component system.
+- React Router for navigation.
+- TanStack Query for server-state fetching, caching, and invalidation.
+- React Hook Form and Zod for form validation.
+- Recharts for charts and attendance analytics.
+- Lucide React for icons.
+
+## Backend
+
+- Java 21 LTS, or a compatible supported Java LTS version.
+- Spring Boot using a compatible stable release.
+- Spring Web for REST APIs.
+- Spring Security for authentication and authorization.
+- Spring Data JPA and Hibernate.
+- Bean Validation for request validation.
+- Flyway for database migrations.
+- Maven for dependency management.
+- JUnit 5 and Mockito for testing.
+
+## Database
+
+- MySQL 8.x.
+- InnoDB tables.
+- Foreign keys, unique constraints, and indexes.
+- Transactional attendance operations.
+- UTC timestamps for audit events where appropriate.
+- Local institution timezone for class schedules and attendance dates.
+
+## Deployment and developer tools
+
+- Docker and Docker Compose.
+- Environment variables for secrets and environment-specific settings.
+- Git-friendly project structure.
+- OpenAPI/Swagger documentation for REST APIs.
+- Structured application logging.
+- Health checks for the backend and database connectivity.
+
+Choose mutually compatible dependency versions. Do not mix incompatible Java, Spring Boot, or library versions.
+
+Do not replace Java Spring Boot with Node.js for the backend. Java must implement the application's core business logic.
+
+---
+
+# 3. APPLICATION USERS AND ROLES
+
+Implement the following roles.
+
+## A. Super Administrator
+
+The super administrator manages the overall platform.
+
+Permissions:
+
+- Manage institution settings.
+- Create and manage administrator accounts.
+- Manage departments and academic years.
+- Manage teachers and students.
+- Create classes, subjects, and class sections.
+- Assign teachers to subjects and classes.
+- Configure attendance rules.
+- View institution-wide reports.
+- Review audit logs.
+- Manage account activation and deactivation.
+
+## B. Administrator
+
+Permissions:
+
+- Manage students and teachers within the permitted institution.
+- Manage classes, sections, subjects, and timetables.
+- Review and correct attendance with an audit trail.
+- View reports and attendance analytics.
+- Export reports.
+- Review low-attendance students.
+- Configure permitted academic settings.
+
+## C. Teacher
+
+Permissions:
+
+- View assigned classes and subjects.
+- View students belonging to authorized classes.
+- View the timetable.
+- Start attendance sessions for assigned classes.
+- Mark Present or Absent.
+- Save and submit attendance.
+- Correct attendance when permitted.
+- View class-wise and student-wise reports.
+- Export reports for authorized classes.
+- View the history of attendance sessions they are allowed to access.
+
+## D. Student
+
+Permissions:
+
+- View their own profile.
+- View their own attendance percentage.
+- View date-wise attendance history.
+- View subject-wise attendance.
+- View low-attendance warnings.
+- View the timetable.
+- Submit an attendance correction request with an explanation.
+- View the status of their correction request.
+
+Students must not be able to modify official attendance records directly.
+
+## Role enforcement requirements
+
+- Enforce permissions on the backend, not only in the frontend.
+- Validate the authenticated user's institution and permitted class scope.
+- Prevent horizontal privilege escalation between students and teachers.
+- Prevent users from changing another user's records by modifying API identifiers.
+- Return appropriate HTTP status codes for forbidden actions.
+- Never rely on a hidden UI button as a security control.
+
+Design the application so that a single-institution deployment works initially, while the data model can accommodate multiple institutions later.
+
+---
+
+# 4. AUTHENTICATION AND ACCOUNT SECURITY
+
+Build a complete authentication module.
+
+Required features:
+
+- Login using email or username and password.
+- Secure password hashing with BCrypt or an appropriately configured password encoder.
+- Logout.
+- Authenticated session handling.
+- Password change functionality.
+- Forgot-password flow suitable for a configured email service.
+- Account activation and deactivation.
+- Failed-login handling and rate limiting.
+- Authorization according to user role.
+- Secure initial administrator creation.
+- No hardcoded production credentials.
+- No plaintext password storage.
+
+Prefer secure, HttpOnly, SameSite cookies for browser authentication, with CSRF protection when using cookie-based authentication.
+
+Configure CORS to allow only explicitly configured frontend origins.
+
+Do not store session identifiers or long-lived authentication secrets in localStorage.
+
+Do not log passwords, cookies, session tokens, or sensitive authentication information.
+
+For the first-run administrator, provide a documented, secure bootstrap process that requires explicit environment configuration or a one-time administrative setup procedure.
+
+If email-based password recovery is not configured, provide a clear development-mode limitation rather than pretending an email was sent.
+
+---
+
+# 5. PROFESSIONAL APPLICATION INTERFACE
+
+Build a polished, responsive, modern education-management interface.
+
+## Design direction
+
+- Clean white and light-gray backgrounds.
+- Professional navy and blue primary colors.
+- Consistent spacing and typography.
+- Subtle shadows and rounded cards.
+- Accessible contrast.
+- Clear navigation hierarchy.
+- Responsive desktop, tablet, and mobile layouts.
+- Proper loading, error, success, and empty states.
+- Useful table sorting, filtering, pagination, and search.
+- Confirmation dialogs for sensitive actions.
+- Keyboard-accessible forms and controls.
+
+Avoid unnecessary gradients, excessive animations, cluttered layouts, and decorative charts with fake values.
+
+## Main layout
+
+Create a sidebar and top navigation containing:
+
+1. Dashboard.
+2. Students.
+3. Teachers.
+4. Departments.
+5. Classes and Sections.
+6. Subjects.
+7. Timetable.
+8. Attendance.
+9. Attendance History.
+10. Reports and Analytics.
+11. Low Attendance.
+12. Correction Requests.
+13. User Management.
+14. Settings.
+15. Audit Logs.
+16. Profile and Logout.
+
+Display only the navigation items allowed for the current user role.
+
+## Dashboard
+
+Display real statistics obtained from backend APIs:
+
+- Total active students.
+- Total active teachers.
+- Total active classes or sections.
+- Present students for the selected date.
+- Absent students for the selected date.
+- Unmarked students for the selected class/date where applicable.
+- Overall recorded attendance percentage.
+- Students below the configured threshold.
+- Recent attendance sessions.
+- Attendance trends over time.
+- Class-wise attendance comparisons.
+- Pending correction requests.
+
+Every card, table, and chart must use actual API results.
+
+Provide filters for date, academic year, department, class, section, and subject where relevant.
+
+Handle an empty database gracefully. Do not fill missing data with invented statistics.
+
+---
+
+# 6. STUDENT MANAGEMENT
+
+Create a complete student management module.
+
+Student fields:
+
+- Student ID.
+- Unique roll number.
+- Full name.
+- Institution email, if available.
+- Contact number, optional.
+- Department.
+- Academic year.
+- Semester.
+- Class and section.
+- Enrollment date.
+- Account status.
+- Created timestamp.
+- Updated timestamp.
+
+Features:
+
+- Create student.
+- View student list.
+- Search by name or roll number.
+- Filter by department, class, section, and academic year.
+- View individual student profile.
+- Edit student details.
+- Activate or deactivate student records.
+- View the student's attendance summary.
+- View date-wise and subject-wise attendance history.
+- Import student records from a validated CSV template.
+- Show row-level import errors.
+- Prevent duplicate student identifiers.
+- Preserve attendance history when a student is deactivated.
+
+Validate required fields on both frontend and backend.
+
+Never delete historical attendance merely because a student's profile is deactivated.
+
+For bulk import, validate the entire file or process rows with a clearly reported result. Avoid silently skipping invalid rows.
+
+---
+
+# 7. TEACHER MANAGEMENT
+
+Create a teacher management module.
+
+Teacher fields:
+
+- Teacher ID.
+- Full name.
+- Unique staff identifier.
+- Email.
+- Contact number, optional.
+- Department.
+- Account status.
+- Assigned subjects.
+- Assigned classes and sections.
+
+Features:
+
+- Add and update teacher records.
+- Activate and deactivate accounts.
+- Assign subjects and classes.
+- View assigned timetable.
+- View attendance sessions created by the teacher.
+- Restrict teacher access to authorized academic assignments.
+- Prevent duplicate staff identifiers.
+
+A teacher should not automatically receive permission to modify every class in the institution.
+
+---
+
+# 8. ACADEMIC STRUCTURE AND TIMETABLE
+
+Implement the academic structure needed for accurate attendance.
+
+Entities should include:
+
+- Institution.
+- Department.
+- Academic year.
+- Semester.
+- Class or program.
+- Section.
+- Subject.
+- Teacher.
+- Student enrollment.
+- Teacher-subject-class assignment.
+- Timetable entry.
+- Attendance session.
+
+The system must support subject-wise attendance and multiple periods per day.
+
+Define a timetable entry with:
+
+- Class and section.
+- Subject.
+- Assigned teacher.
+- Day of week.
+- Start time.
+- End time.
+- Academic year or semester.
+- Effective date range, where needed.
+
+Only allow attendance sessions for valid class, subject, and teacher assignments, subject to authorized administrative exceptions.
+
+Avoid relying solely on a date field for the uniqueness of attendance. Since multiple classes or subjects may occur on the same date, use an explicit attendance-session identifier.
+
+---
+
+# 9. CORE ATTENDANCE MANAGEMENT ENGINE
+
+This is the most important part of the platform.
+
+## Attendance session workflow
+
+1. Teacher logs in.
+2. The dashboard displays the teacher's assigned classes and timetable.
+3. The teacher selects an authorized class, subject, and session.
+4. The backend validates the assignment and attendance date.
+5. The system loads the eligible students for the class.
+6. The teacher marks each student Present or Absent.
+7. The interface displays marked and unmarked counts.
+8. The teacher reviews the session.
+9. The system validates all entries.
+10. The teacher saves or submits the session.
+11. The backend stores the records in a database transaction.
+12. The system confirms the result and refreshes the relevant statistics.
+
+## Attendance statuses
+
+Support at least:
+
+- PRESENT.
+- ABSENT.
+- LATE.
+- EXCUSED, if permitted by institutional policy.
+
+Define the effect of each status on attendance calculations explicitly.
+
+A configurable default policy may count PRESENT and LATE as attended, ABSENT as not attended, and EXCUSED as excluded from the denominator. This policy must be documented and configurable by an authorized administrator.
+
+Do not silently treat an unmarked student as Absent.
+
+## Attendance rules
+
+- Prevent duplicate attendance for the same student in the same session.
+- Use database unique constraints.
+- Validate that each student is enrolled in the relevant class.
+- Validate that the session belongs to the correct class and subject.
+- Validate teacher permissions.
+- Prevent attendance entries for inactive or ineligible enrollments.
+- Allow permitted corrections with a recorded reason.
+- Prevent unauthorized changes to submitted or locked sessions.
+- Provide an explicit correction or reopening workflow.
+- Preserve a full audit trail of important changes.
+- Use database transactions for multi-student submissions.
+- Roll back the transaction if the save fails.
+- Handle concurrent updates safely.
+- Return meaningful validation errors to the frontend.
+
+## Session states
+
+Implement appropriate states such as:
+
+- DRAFT.
+- SUBMITTED.
+- LOCKED.
+
+Define permitted transitions. For example, teachers can edit drafts, submission finalizes the session, and reopening a submitted or locked session requires the appropriate permission and audit record.
+
+The exact policy should be configurable and documented.
+
+## Attendance summary
+
+For each session, display:
+
+- Eligible students.
+- Present.
+- Absent.
+- Late.
+- Excused.
+- Unmarked.
+- Total marked.
+- Completion percentage.
+
+Make it clear that completion percentage means the proportion of eligible students with a recorded status, not student attendance percentage.
+
+---
+
+# 10. SMART QR-CODE ATTENDANCE
+
+Implement QR-based attendance as an optional module after manual attendance is working correctly.
+
+Do not let QR attendance become a shortcut that bypasses the core attendance rules.
+
+## QR workflow
+
+1. An authorized teacher opens an attendance session.
+2. The backend creates a short-lived QR check-in token.
+3. The frontend displays the QR code.
+4. An authenticated student scans it using a device camera or a supported QR scanner.
+5. The student confirms the check-in.
+6. The backend validates the session, student enrollment, token, expiration, and attendance policy.
+7. The system records the check-in once.
+8. The student receives a confirmation.
+9. The teacher dashboard updates the session counts.
+
+## QR security
+
+- Use cryptographically secure, unpredictable tokens.
+- Expire tokens quickly.
+- Associate each token with a specific session.
+- Enforce one valid attendance record per student per session.
+- Validate token expiration on the backend.
+- Rate-limit repeated attempts.
+- Reject invalid or reused tokens according to the configured policy.
+- Never place a database password or privileged credential in the QR code.
+- Do not treat a static QR image as strong proof of physical presence.
+- Explain the limitations of screenshot sharing and replay attacks.
+- If a stronger presence check is required, propose a separately assessed design such as rotating QR codes combined with supervised check-in.
+
+Do not claim GPS, device identity, or biometric verification unless the feature is actually implemented, consented to where appropriate, and tested.
+
+Provide a manual attendance fallback if QR scanning is unavailable.
+
+---
+
+# 11. ATTENDANCE CALCULATIONS
+
+Implement all calculations in a tested backend service.
+
+Use:
+
+Attendance Percentage = (Counted Attended Sessions / Eligible Recorded Sessions) × 100
+
+The exact numerator and denominator must follow the configured attendance policy.
+
+For the default policy:
+
+- PRESENT counts as attended.
+- LATE counts as attended if configured.
+- ABSENT counts in the denominator but not the numerator.
+- EXCUSED may be excluded from the denominator.
+- Unmarked records do not count as a completed attendance result.
+- Cancelled sessions must not be counted as held sessions.
+- Only valid sessions inside the selected reporting period should be included.
+
+Rules:
+
+- Return 0% if the denominator is zero.
+- Avoid integer division.
+- Use appropriate decimal precision.
+- Do not count duplicate records.
+- Do not count attendance for cancelled sessions.
+- Respect student enrollment dates.
+- Apply subject-wise and overall calculations consistently.
+- Clearly display the reporting period and policy used.
+- Recalculate statistics from persisted records rather than trusting frontend values.
+
+Example:
+
+If a student has 32 counted attended sessions out of 40 eligible recorded sessions:
+
+(32 / 40) × 100 = 80%.
+
+If the configured minimum attendance threshold is 75%, the student is above the threshold.
+
+A student at exactly 75% is not below a 75% threshold.
+
+For the low-attendance report, compare the calculated percentage with the configured threshold using the defined policy.
+
+---
+
+# 12. REPORTS AND ANALYTICS
+
+Create a complete reporting module.
+
+## Student-wise report
+
+Display:
+
+- Student name and roll number.
+- Department, class, and section.
+- Selected date range.
+- Subject.
+- Counted attended sessions.
+- Eligible recorded sessions.
+- Absent and other status counts.
+- Attendance percentage.
+- Configured threshold.
+- Low-attendance status.
+- Date-wise attendance history.
+
+## Class-wise report
+
+Display:
+
+- All eligible students in the selected class.
+- Attendance counts.
+- Attendance percentage.
+- Class average, calculated from a clearly defined method.
+- Low-attendance students.
+- Filters for subject, academic year, and date range.
+
+## Subject-wise report
+
+Display student attendance by subject and semester.
+
+## Date-wise report
+
+Display:
+
+- Session details.
+- Class and subject.
+- Teacher.
+- Attendance statuses.
+- Marked and unmarked counts.
+- Submission state.
+
+## Low-attendance report
+
+Display all students whose attendance is below the selected threshold.
+
+Provide configurable thresholds, such as 75%, but do not hardcode the threshold throughout the application.
+
+## Trends and analytics
+
+Create charts for:
+
+- Daily attendance trends.
+- Monthly attendance trends.
+- Subject-wise attendance.
+- Class-wise comparisons.
+- Students requiring attention.
+
+Use actual database aggregates.
+
+## Export
+
+Support:
+
+- CSV exports.
+- Printable report layouts.
+- PDF export if feasible after the core reporting workflow works.
+
+Ensure exports respect user permissions and selected filters.
+
+Use correct CSV escaping and safe handling of potentially formula-triggering spreadsheet values.
+
+Do not expose other students' personal data to student accounts.
+
+---
+
+# 13. ATTENDANCE CORRECTION REQUESTS
+
+Allow students to submit a correction request when they believe an attendance record is incorrect.
+
+Each request should contain:
+
+- Student reference.
+- Attendance session.
+- Existing attendance status.
+- Explanation.
+- Submission time.
+- Request status.
+- Reviewer.
+- Review comments.
+- Decision timestamp.
+
+Request states:
+
+- PENDING.
+- APPROVED.
+- REJECTED.
+
+Workflow:
+
+1. Student opens their own attendance history.
+2. Student selects a record and submits an explanation.
+3. The system creates a pending request.
+4. An authorized teacher or administrator reviews it.
+5. The reviewer approves or rejects it with an explanation.
+6. If approved, the actual attendance correction is applied through the normal service layer.
+7. An audit entry records the old and new values, reviewer, reason, and timestamp.
+8. The student can view the decision.
+
+Submitting a request must not automatically change official attendance.
+
+---
+
+# 14. NOTIFICATIONS
+
+Implement an in-app notification system.
+
+Possible notifications:
+
+- Low attendance warning.
+- Attendance correction decision.
+- Attendance session completion.
+- Important academic announcements.
+
+For email notifications, use an explicitly configured provider.
+
+Requirements:
+
+- Store notification status and creation time.
+- Track whether a notification has been read.
+- Avoid generating duplicate notifications repeatedly.
+- Handle provider failures without losing the main attendance transaction.
+- Do not claim an email or SMS was delivered without a provider response.
+- Keep external messaging credentials in environment variables.
+
+Implement low-attendance notification rules with sensible frequency controls to prevent repeated unnecessary alerts.
+
+---
+
+# 15. MYSQL DATABASE DESIGN
+
+Design a normalized relational schema using Flyway migrations.
+
+Include tables appropriate to the implemented features:
+
+- institutions.
+- departments.
+- users.
+- roles or an equivalent role model.
+- students.
+- teachers.
+- academic_years.
+- semesters.
+- classes.
+- sections.
+- subjects.
+- enrollments.
+- teacher_assignments.
+- timetable_entries.
+- attendance_sessions.
+- attendance_records.
+- attendance_correction_requests.
+- app_settings.
+- notifications.
+- audit_logs.
+
+Add supporting tables for QR tokens or password-reset tokens when required.
+
+Use:
+
+- Primary keys.
+- Foreign keys.
+- Unique constraints.
+- Appropriate indexes.
+- Created and updated timestamps.
+- Account activation flags.
+- Appropriate status constraints.
+- Transactions for multi-record operations.
+- Carefully selected deletion and retention rules.
+
+Do not store every student's entire attendance history in one JSON field.
+
+Do not use a single attendance table design that prevents multiple subjects or sessions on the same day.
+
+Add a uniqueness rule for attendance records within an attendance session, for example:
+
+UNIQUE(attendance_session_id, student_id)
+
+Ensure the database can distinguish different academic years and enrollment periods.
+
+Keep schema migrations version-controlled and repeatable.
+
+Provide initial migration files and non-sensitive sample data for development.
+
+Never include real personal data or production credentials in sample data.
+
+---
+
+# 16. BACKEND API DESIGN
+
+Implement REST APIs with consistent request and response formats.
+
+Use a versioned API namespace such as /api/v1.
+
+Example endpoint groups:
+
+## Authentication
+
+POST /api/v1/auth/login
+
+POST /api/v1/auth/logout
+
+GET /api/v1/auth/me
+
+POST /api/v1/auth/change-password
+
+## Students
+
+GET /api/v1/students
+
+POST /api/v1/students
+
+GET /api/v1/students/{id}
+
+PUT /api/v1/students/{id}
+
+PATCH /api/v1/students/{id}/status
+
+GET /api/v1/students/{id}/attendance
+
+## Teachers
+
+GET /api/v1/teachers
+
+POST /api/v1/teachers
+
+GET /api/v1/teachers/{id}
+
+PUT /api/v1/teachers/{id}
+
+## Academic management
+
+GET /api/v1/classes
+
+GET /api/v1/subjects
+
+GET /api/v1/timetable
+
+Provide appropriate create and update operations for authorized administrators.
+
+## Attendance
+
+GET /api/v1/attendance/sessions
+
+POST /api/v1/attendance/sessions
+
+GET /api/v1/attendance/sessions/{id}
+
+PUT /api/v1/attendance/sessions/{id}/records
+
+POST /api/v1/attendance/sessions/{id}/submit
+
+POST /api/v1/attendance/sessions/{id}/reopen
+
+GET /api/v1/attendance/sessions/{id}/summary
+
+## Reports
+
+GET /api/v1/reports/student-attendance
+
+GET /api/v1/reports/class-attendance
+
+GET /api/v1/reports/subject-attendance
+
+GET /api/v1/reports/low-attendance
+
+GET /api/v1/reports/attendance-trends
+
+## Correction requests
+
+POST /api/v1/correction-requests
+
+GET /api/v1/correction-requests
+
+POST /api/v1/correction-requests/{id}/review
+
+## Notifications
+
+GET /api/v1/notifications
+
+PATCH /api/v1/notifications/{id}/read
+
+These are proposed endpoint names, not permission to implement insecure generic CRUD. Adjust the API design as necessary, and document the final endpoints.
+
+For every endpoint, implement:
+
+- Authentication where required.
+- Authorization.
+- Input validation.
+- Correct HTTP status codes.
+- Consistent error responses.
+- Pagination for large collections.
+- Search and filtering where appropriate.
+- API documentation.
+- Integration tests for important security and business rules.
+
+Use DTOs rather than exposing database entities directly.
+
+Never trust a client-provided user ID or role to determine the authenticated user's permissions.
+
+---
+
+# 17. PROJECT STRUCTURE
+
+Create a maintainable monorepo similar to:
+
+smart-attendance-platform/
+  frontend/
+    src/
+      app/
+      components/
+      layouts/
+      pages/
+      features/
+        auth/
+        dashboard/
+        students/
+        teachers/
+        academics/
+        attendance/
+        reports/
+        notifications/
+        settings/
+      hooks/
+      lib/
+      services/
+      types/
+      validation/
+    public/
+    package.json
+    vite.config.ts
+
+  backend/
+    src/
+      main/
+        java/
+          com/example/smartattendance/
+            config/
+            security/
+            controller/
+            dto/
+            model/
+            repository/
+            service/
+            mapper/
+            validation/
+            exception/
+            audit/
+        resources/
+          application.yml
+          db/migration/
+      test/
+        java/
+
+    pom.xml
+
+  database/
+    sample-data.sql
+
+  docs/
+    architecture.md
+    api-documentation.md
+    setup-guide.md
+    testing-guide.md
+    security-notes.md
+
+  docker-compose.yml
+  .env.example
+  .gitignore
+  README.md
+
+Adjust package names consistently if a different project naming convention is chosen.
+
+Keep controllers thin. Place business rules in services. Use repositories for persistence and DTOs for API contracts.
+
+---
+
+# 18. FRONTEND-BACKEND INTEGRATION
+
+Every implemented screen must be connected to a real backend API.
+
+Requirements:
+
+- Centralized API client.
+- Consistent error handling.
+- Loading and retry states.
+- Authentication-aware routing.
+- Role-aware navigation.
+- Server-side pagination and filtering for large datasets.
+- Request validation.
+- Form submission feedback.
+- Query invalidation after mutations.
+- Empty states for missing records.
+- Session expiration handling.
+- No hardcoded attendance statistics.
+- No fake successful API responses.
+- No unnecessary duplicate network requests.
+
+If the backend is unavailable, show an understandable error. Do not silently replace failed requests with mock data.
+
+Development mock data may be provided as a separate, explicitly labeled mode, but production mode must use the backend.
+
+---
+
+# 19. SECURITY AND PRIVACY
+
+Apply security practices appropriate for an educational records platform.
+
+Implement:
+
+- Secure password hashing.
+- Backend authorization checks.
+- CSRF protection for cookie-based authentication.
+- Restricted CORS.
+- Parameterized database access.
+- Input validation.
+- Rate limiting on sensitive endpoints.
+- Safe error messages.
+- Audit logging.
+- Secret management through environment variables.
+- Secure password-reset tokens if recovery is implemented.
+- Access restrictions for reports and student data.
+- Protection against insecure direct object references.
+- Secure session expiration.
+- Appropriate logging and data-retention practices.
+
+Do not store unnecessary sensitive information.
+
+Do not implement facial recognition or biometric attendance by default. If considered later, document consent, privacy, security, legal, and accuracy implications and evaluate whether it is necessary.
+
+Do not claim that the platform is production-certified or fully secure merely because these features have been added. Security must be tested and independently reviewed before real institutional deployment.
+
+---
+
+# 20. TESTING REQUIREMENTS
+
+Create meaningful automated tests.
+
+## Unit tests
+
+Test:
+
+- Attendance percentage calculation.
+- Attendance threshold boundaries.
+- Exclusion of cancelled sessions.
+- Treatment of excused attendance.
+- Duplicate attendance validation.
+- Session state transitions.
+- Role-based business rules.
+- Correction-request decisions.
+- CSV formatting and export rules.
+
+## Backend integration tests
+
+Test:
+
+- Login and logout.
+- Authorized and unauthorized requests.
+- Student creation and duplicate prevention.
+- Attendance session creation.
+- Attendance submission and database persistence.
+- Duplicate attendance constraints.
+- Transaction rollback.
+- Correction approval and audit history.
+- Report filtering.
+- Access restrictions between students and teachers.
+
+Use a dedicated test database or an appropriately configured isolated database environment.
+
+## Frontend tests
+
+Test:
+
+- Login validation.
+- Protected routes.
+- Role-specific navigation.
+- Student forms.
+- Attendance status selection.
+- API loading and error states.
+- Attendance summaries.
+- Correction-request forms.
+
+## End-to-end tests
+
+Where feasible, use Playwright to test the primary user journey:
+
+1. Administrator signs in.
+2. Administrator creates a student and assigns a class.
+3. Administrator or authorized staff assigns a teacher.
+4. Teacher signs in.
+5. Teacher creates or opens an authorized attendance session.
+6. Teacher marks attendance and submits it.
+7. The database stores the records.
+8. Reports show the correct attendance percentage.
+9. A student views their own attendance.
+10. A correction request is reviewed and audited.
+
+Do not claim tests passed unless they were actually executed. Report test failures honestly and fix them before declaring completion.
+
+---
+
+# 21. DEPLOYMENT AND RUNNING
+
+Provide a complete local development setup.
+
+The setup guide must explain:
+
+- Installing a compatible Java LTS runtime and JDK.
+- Installing Node.js and npm.
+- Installing Docker, or alternatively configuring MySQL locally.
+- Configuring environment variables.
+- Starting MySQL.
+- Applying Flyway migrations.
+- Creating the initial administrator securely.
+- Starting the Spring Boot backend.
+- Starting the React frontend.
+- Running tests.
+- Building the frontend for production.
+- Packaging the backend.
+- Running the complete application through Docker Compose.
+- Troubleshooting common database, CORS, authentication, and build failures.
+
+Include a Docker Compose configuration for the database and any application services that can be containerized appropriately.
+
+Include health checks, persistent database storage, and safe environment configuration.
+
+Do not commit .env files containing actual secrets.
+
+Document the development URLs and ports. Do not assume a production domain or claim cloud deployment is complete unless it has actually been performed.
+
+---
+
+# 22. DEVELOPMENT EXECUTION RULES
+
+Work directly in the available project workspace.
+
+First inspect the existing files and repository, if any. Preserve useful existing code rather than replacing it blindly.
+
+Then follow this implementation order:
+
+PHASE 1 — Requirements, architecture, database ER diagram, API design, and repository setup.
+
+PHASE 2 — Spring Boot configuration, MySQL connection, Flyway migrations, models, repositories, and health checks.
+
+PHASE 3 — Authentication, role-based authorization, initial administrator setup, and security tests.
+
+PHASE 4 — Student, teacher, department, class, subject, enrollment, and timetable management.
+
+PHASE 5 — Attendance session lifecycle, manual attendance, duplicate prevention, transactions, and audit logging.
+
+PHASE 6 — Attendance calculation services, low-attendance reports, analytics, and CSV export.
+
+PHASE 7 — React layouts, login, dashboard, student management, teacher management, and academic management.
+
+PHASE 8 — Attendance interface, reports, notifications, and correction requests.
+
+PHASE 9 — Optional QR attendance after the manual workflow is working.
+
+PHASE 10 — Integration testing, bug fixes, accessibility checks, build verification, Docker setup, and documentation.
+
+After each phase:
+
+- List files created and modified.
+- Implement complete, connected functionality.
+- Run the relevant build or tests when execution tools are available.
+- Fix compilation and integration errors.
+- Verify that frontend API calls match backend routes.
+- Verify that backend queries match the database schema.
+- Explain any external configuration still required.
+- Continue to the next phase instead of stopping after planning.
+
+Do not generate thousands of disconnected lines of code in one response and claim the platform is complete.
+
+If output limits prevent completing everything in one turn, persist the work in project files, maintain a concise implementation checklist, and continue from the last completed phase.
+
+Do not ask me to make unnecessary technology decisions. Use the stack and defaults specified in this prompt. Ask a question only if a genuinely essential requirement cannot be resolved safely.
+
+---
+
+# 23. FINAL ACCEPTANCE CRITERIA
+
+The platform is complete only when the following can be demonstrated:
+
+- The frontend starts and displays a working application.
+- The Java backend starts successfully.
+- MySQL stores and retrieves real records.
+- Authentication and role permissions work.
+- Student and teacher management work.
+- Academic classes and subject assignments work.
+- Teachers can mark and submit attendance for authorized sessions.
+- Multiple sessions per day are supported.
+- Duplicate attendance is prevented by the database and service layer.
+- Attendance percentages follow the documented policy.
+- Low-attendance reports use actual persisted records.
+- Historical reports and CSV exports work.
+- Students can view only their own attendance data.
+- Correction requests follow the approval workflow.
+- Important attendance changes are auditable.
+- Frontend and backend validation work.
+- Critical automated tests run successfully.
+- The README contains reproducible setup instructions.
+- Docker-based local deployment works if Docker is available.
+- The system contains no unfinished core features, fake report statistics, or misleading success messages.
+
+At the end, provide:
+
+1. Final repository structure.
+2. Implemented feature checklist.
+3. Commands to run the application.
+4. Database setup instructions.
+5. Test results, including any tests not run.
+6. Known limitations.
+7. Screenshots of the actual running application, if screenshot tools are available.
+8. Remaining steps required for a real institutional deployment.
+
+BEGIN NOW.
+
+First inspect the existing project workspace and available development tools. Then establish the architecture and database migrations, implement the backend foundations, and continue through the full application. Prioritize a working, tested end-to-end attendance workflow over adding decorative UI or optional features too early.
